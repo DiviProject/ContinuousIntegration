@@ -1,0 +1,20 @@
+{
+  "name": "divici",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/DiviProject/ContinuousIntegration.git",
+  "author": "Chris Cates <hello@chriscates.ca>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^13.7.6",
+    "colors": "^1.4.0",
+    "fs-jetpack": "^2.2.3",
+    "ssh2": "^0.8.8",
+    "superagent": "^5.2.2",
+    "typescript": "^3.8.2"
+  },
+  "scripts": {
+    "start": "npm run build && node dist/CI.js",
+    "build": "tsc src/CI.ts --outDir dist"
+  }
+}
