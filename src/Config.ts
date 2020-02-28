@@ -1,11 +1,17 @@
 import { read } from 'fs-jetpack';
 import { Client } from 'ssh2';
 
-interface NodeConfigInterface {
-    host: string;
-    port: number;
-    username: string;
-    privateKey?: string;
+export interface NodeConfigInterface {
+    network: string;
+    snapshot: string;
+    logfile: string;
+    ssh: {
+        host: string;
+        port: number;
+        username: string;
+        privateKey?: string;
+    },
+    client: any,
 }
 
 const NodeConfig: Array<NodeConfigInterface> = JSON.parse(read(process.env.CONFIG || 'node.ci.config.json'));
@@ -13,9 +19,10 @@ const Nodes: Client = [];
 
 NodeConfig.forEach(configuration => {
     const Node = new Client();
-    configuration.privateKey = configuration.privateKey ? read(configuration.privateKey) : null;
-    Node.connect(configuration);
-    Nodes.push(Node);
+    configuration.ssh.privateKey = configuration.ssh.privateKey ? read(configuration.ssh.privateKey) : null;
+    Node.connect(configuration.ssh);
+    configuration.client = Node;
+    Nodes.push(configuration);
 });
 
 export { NodeConfig, Nodes }

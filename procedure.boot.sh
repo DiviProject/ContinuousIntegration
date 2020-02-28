@@ -1,0 +1,2 @@
+divid --daemon
+exit

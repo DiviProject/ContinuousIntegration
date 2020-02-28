@@ -48,3 +48,4 @@ Thumbs.db
 # CI Specific
 node.ci.config.json
 log
+**/*.log

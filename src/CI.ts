@@ -1,22 +1,27 @@
-import 'colors';
-import { Nodes } from './Config';
+import { read } from 'fs-jetpack';
+
+import { NodeConfigInterface, Nodes } from './Config';
+import { Log } from './Logger';
 
 export async function Run() {
     for (let i = 0; i < Nodes.length; i++) {
-        const Node = Nodes[i];
-        Node.on('ready', ready => {
-            console.log(`Connecting to Node ${i}`);
-            Node.shell((err, stream) => {
+        const Node: NodeConfigInterface = Nodes[i];
+        Node.client.on('ready', ready => {
+            Log(`Connecting to Node ${i}`, Node.logfile);
+            Node.client.shell((err, stream) => {
                 if (err) {
-                    console.log(err);
+                    Log(err, Node.logfile);
                 } else {
                     stream.on('data', data => {
-                        console.log(data.toString());
+                        Log(data.toString(), Node.logfile, false);
                     });
                     stream.on('close', closed => {
-                        console.log(`Node ${i} connection closed`);
+                        Log(`Node ${i} connection closed`, Node.logfile);
                     });
-                    stream.end(`ls -la\nexit\n`);
+
+                    Log(`Running make procedure for Node ${i}\n\n`, Node.logfile);
+
+                    stream.end(read('procedure.make.sh'));
                 }
             });
         });
