@@ -12,6 +12,7 @@ export interface NodeConfigInterface {
         privateKey?: string;
     },
     client: any,
+    state: string;
 }
 
 const NodeConfig: Array<NodeConfigInterface> = JSON.parse(read(process.env.CONFIG || 'node.ci.config.json'));
@@ -22,6 +23,7 @@ NodeConfig.forEach(configuration => {
     configuration.ssh.privateKey = configuration.ssh.privateKey ? read(configuration.ssh.privateKey) : null;
     Node.connect(configuration.ssh);
     configuration.client = Node;
+    Node.state = 'ready';
     Nodes.push(configuration);
 });
 

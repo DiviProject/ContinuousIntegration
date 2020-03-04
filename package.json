@@ -14,7 +14,19 @@
     "typescript": "^3.8.2"
   },
   "scripts": {
-    "start": "npm run build && node dist/CI.js",
-    "build": "tsc src/CI.ts --outDir dist"
+    "build-install": "tsc src/Install.ts --outDir dist",
+    "install": "npm run build-install && node dist/Install.js",
+    "build-make": "tsc src/Make.ts --outDir dist",
+    "make": "npm run build-make && node dist/Make.js",
+    "build-seeds": "tsc src/Seeds.ts --outDir dist",
+    "seeds": "npm run build-seeds && node dist/Seeds.js",
+    "build-snapshot": "tsc src/Snapshot.ts --outDir dist",
+    "snapshot": "npm run build-snapshot && node dist/Snapshot.js",
+    "build-boot": "tsc src/Boot.ts --outDir dist",
+    "boot": "npm run build-boot && node dist/Boot.js",
+    "build-kill": "tsc src/Kill.ts --outDir dist",
+    "kill": "npm run build-kill && node dist/Kill.js",
+    "build-test": "tsc src/Test.ts --outDir dist",
+    "test": "npm run build-test && node dist/Test.js"
   }
 }

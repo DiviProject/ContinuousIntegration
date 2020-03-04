@@ -42,6 +42,8 @@ sudo apt-get install make gcc g++ pkg-config autoconf libtool libboost-all-dev l
 
 ### Usage
 
+#### Node Configuration
+
 1. make sure to configure your `node.ci.config.json` node. The configuration file uses the following format:
 
 ```json
@@ -63,7 +65,12 @@ sudo apt-get install make gcc g++ pkg-config autoconf libtool libboost-all-dev l
 
 The private key would be your `id_rsa` in your `.ssh` or any other RSA key that you have provided to existing nodes.
 
-You can specify a custom path for a configuration file by using the `CONFIG` environment variable.
+You can actually use `node.ci.config.example.json` as an example.
+
+
+#### Configuration Path
+
+You can specify a custom path for a configuration file by using the `CONFIG` environment variable. The default path is `~/node.ci.config.json`.
 
 ```bash
 # UNIX
@@ -75,26 +82,71 @@ export CONFIG='path/to/config/file.json'
 SET CONFIG=path\to\config\file.json
 ```
 
-You can also set a custom path for logging
+#### divi.conf Configuration
+
+You can also set a custom path for the `divi.conf` file in nodes. The default path is `/root/.divi/divi.conf`.
 
 ```bash
 # UNIX
-export LOG_FILE='path/to/config/logfile.log'
+export DIVI_CONF='/root/.divi/divi.conf'
+```
+
+```dos
+# Windows / DOS (note the path doesn't use Windows path escape sequence)
+SET DIVI_CONF=/root/.divi/divi.conf
+```
+
+#### seeds.conf
+
+You can customize the networks seed nodes with the `seeds.conf`. This method is optional. However it is required to do main network sandbox testing when using a snapshot of the mainnet. The default path is `~/seeds.conf`.
+
+```bash
+# UNIX
+export SEED_CONFIG='path/to/config/file.json'
 ```
 
 ```dos
 # Windows / DOS
-SET LOG_FILE=path\to\config\logfile.log
+SET SEED_CONFIG=path\to\config\file.json
 ```
 
-2. After setting up the configuration file. You can now run CI testing
+
+### Procedures
+
+If you don't have the required dependencies. You can run.
 
 ```bash
-yarn start
+yarn install
 ```
 
-3. You can run custom testing configuration by running
+After setting up the configuration file. You can now make and run nodes by running `yarn make`
 
 ```bash
-yarn test
+yarn make
 ```
+
+Once the make procedure is successful. You can then run the boot procedure. This will run the `divid` daemon.
+
+```bash
+yarn boot
+```
+
+If you want to use a snapshot (from https://snapshots.diviproject.org), make sure to run the kill procedure. And then the snapshot command.
+
+```bash
+yarn kill # this turns off the divi daemon in every node.
+```
+
+```bash
+yarn snapshot # this migrates the snapshot to the node.
+```
+
+Please make sure to give each node time to process and update configurations. For example. If you are booting from a snapshot of the chain. Or if you're booting to the main network. You will need to wait for the network to sync.
+
+If you want to use custom seeds. Run the `yarn seeds` command. Just make sure to make the project again after.
+
+```bash
+yarn seeds
+yarn make # make the project after updating seeds
+```
+
